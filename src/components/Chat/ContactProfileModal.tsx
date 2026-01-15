@@ -87,6 +87,8 @@ export const ContactProfileModal: React.FC<ContactProfileModalProps> = ({
 
   if (!isOpen || !contact) return null;
 
+  const isAccountDeleted = contact.status === 'deleted';
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div
@@ -113,6 +115,12 @@ export const ContactProfileModal: React.FC<ContactProfileModalProps> = ({
         </div>
 
         <div className={`p-6 space-y-6`}>
+          {isAccountDeleted && (
+            <div className="p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded border border-red-400 dark:border-red-700">
+              <p className="font-semibold">Account Deleted</p>
+              <p className="text-sm mt-1">This account no longer exists.</p>
+            </div>
+          )}
           {error && (
             <div className="p-3 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded">
               {error}

@@ -7,11 +7,23 @@ import {
   deleteUser,
   updateProfile
 } from 'firebase/auth';
-import { doc, setDoc, getDoc, Timestamp, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, Timestamp, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import { User } from '../types';
 
+export const checkDisplayNameExists = async (displayName: string): Promise<boolean> => {
+  const usersRef = collection(db, 'users');
+  const q = query(usersRef, where('displayName', '==', displayName));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.size > 0;
+};
+
 export const signUp = async (email: string, password: string, displayName: string): Promise<User> => {
+  const displayNameExists = await checkDisplayNameExists(displayName);
+  if (displayNameExists) {
+    throw new Error('This display name is already taken. Please choose another one.');
+  }
+
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
 

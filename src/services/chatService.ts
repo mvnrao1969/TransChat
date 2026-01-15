@@ -216,6 +216,7 @@ export const getUser = async (userId: string): Promise<User | null> => {
     email: data.email,
     displayName: data.displayName,
     createdAt: new Date(data.createdAt),
+    status: data.status || 'active',
   };
 };
 

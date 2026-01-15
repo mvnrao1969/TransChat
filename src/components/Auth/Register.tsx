@@ -36,7 +36,11 @@ export const Register: React.FC<RegisterProps> = ({ onToggleMode }) => {
       await signUp(email, password, displayName);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+        let errorMessage = err.message;
+        if (errorMessage.includes('already taken')) {
+          errorMessage = errorMessage + ' ' + getDisplayNameError();
+        }
+        setError(errorMessage);
       } else {
         setError('Failed to create account');
       }
